@@ -16,9 +16,19 @@ public class ListNode<T> {
      *
      * @param v
      */
-    ListNode(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    ListNode(T v, MyList ownedby, int index, ListNode previous) {
+setValue(v);
+setOwnedBy(ownedby);
+setIndex(index);
+if(previous!=null){
+previous.setPointer(this);
+}
     }
+
+    private int index;
+    private ListNode pointer;
+    private T value;
+    private MyList ownedBy;
 
     /**
      * return the value being held by this Node.
@@ -26,6 +36,33 @@ public class ListNode<T> {
      * @return
      */
     public T getValue() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.value;
+    }
+    public void setValue(T v){
+    this.value=v;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public ListNode getPointer() {
+        return pointer;
+    }
+
+    public void setPointer(ListNode pointer) {
+        this.pointer = pointer;
+    }
+
+    public MyList getOwnedBy() {
+        return ownedBy;
+    }
+
+    public void setOwnedBy(MyList ownedBy) {
+        this.ownedBy = ownedBy;
     }
 }
