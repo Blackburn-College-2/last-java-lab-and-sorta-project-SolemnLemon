@@ -12,6 +12,14 @@ package liststacktemplate;
  */
 public class MyList<T> {
 
+    private int size;
+    private ListNode FirstTerm;
+    private ListNode lastTerm;
+
+    public MyList() {
+        setSize(0);
+    }
+
     /**
      * get the ith element stored in the list. Note that this does not return
      * the containing node, but the stored element in the node. Null if D.N.E.
@@ -20,7 +28,17 @@ public class MyList<T> {
      * @return
      */
     public T get(int i) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ListNode camera = getFirstTerm();
+        while (camera.getIndex() != i) {
+            camera = camera.getPointer();
+            if (camera.getPointer() == null) {
+                System.out.println("term of that index does not exist");
+                return null;
+            }
+        }
+        //complained when I didn't cast it said I was returning an object 
+        //instead of a T probably a side affect of the amigous typing
+        return (T) camera.getValue();
     }
 
     /**
@@ -30,7 +48,36 @@ public class MyList<T> {
      * @return the modified list object
      */
     public MyList<T> add(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //update size after add so that index 0 actually starts at 0
+        ListNode node = new ListNode(v, this, size(), getLastTerm());
+        if (node.getIndex() == 0) {
+            //if this is the first term added
+            setFirstTerm(node);
+        }
+        if (checkFinal(node)) {
+            System.out.println("added term number " + size() + " succesfully");
+        }
+        setSize(size() + 1);
+        correctIndex();
+        return this;
+
+    }
+
+    /**
+     * to be done after anything is added to the list the only condition where
+     * the pointer should be null is when the term is the last term in the list
+     *
+     * @param term
+     * @return returns if the the term was final or not
+     *
+     */
+    public boolean checkFinal(ListNode term) {
+        if (term.getPointer() == null) {
+            setLastTerm(term);
+            return true;
+        }
+        return false;
+
     }
 
     /**
@@ -44,7 +91,46 @@ public class MyList<T> {
         Be careful here! think about edge cases. If you choose to keep a
         'last' pointer, what if the element being removed is last?
          */
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        ListNode camera = getFirstTerm();
+        ListNode previousTerm = null;
+        while (camera.getIndex() != i) {
+            previousTerm = camera;
+            camera = camera.getPointer();
+            if (camera.getPointer() == null) {
+                System.out.println("term of that index does not exist");
+                return null;
+            }
+        }
+        if (camera.getPointer() == null) {
+            setLastTerm(previousTerm);
+        }
+        if (previousTerm == null) {
+            setFirstTerm(camera.getPointer());
+        } else {
+            previousTerm.setPointer(camera.getPointer());
+        }
+        correctIndex();
+        setSize(size()-1);
+        return (T) camera.getValue();
+    }
+
+    /**
+     * makes sure index still lines up after any changes to the list
+     */
+    public void correctIndex() {
+        ListNode camera = getFirstTerm();
+        int i = 0;
+        while (camera.getPointer() != null) {
+            camera.setIndex(i);
+            camera = camera.getPointer();
+            i++;
+        }
+
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     /**
@@ -54,7 +140,17 @@ public class MyList<T> {
      * @return the index or -1 if not found.
      */
     public int indexOf(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        ListNode camera = getFirstTerm();
+        while (camera.getValue() != v) {
+            camera = camera.getPointer();
+            if (camera.getPointer() == null) {
+                System.out.println("term of that value does not exist");
+                //returns -1 to signify an issue
+                return -1;
+            }
+        }
+        return camera.getIndex();
     }
 
     /**
@@ -66,7 +162,8 @@ public class MyList<T> {
      * ls.remove(3).remove(4)...
      */
     public MyList<T> remove(T v) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        removeAtIndex(size());
+        return this;
     }
 
     /**
@@ -75,7 +172,7 @@ public class MyList<T> {
      * @return the length/size.
      */
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.size;
     }
 
     /**
@@ -84,7 +181,10 @@ public class MyList<T> {
      * @return true if list contains at least 1 element, false otherwise.
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (size() == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -94,7 +194,32 @@ public class MyList<T> {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
+        String s = "";
+        ListNode camera = getFirstTerm();
+        while (camera != null) {
+            s = s + camera.getValue() + "     ";
+            camera = camera.getPointer();
+
+        }
+        return s;
+
+    }
+
+    public ListNode getLastTerm() {
+        return lastTerm;
+    }
+
+    public void setLastTerm(ListNode lastTerm) {
+        this.lastTerm = lastTerm;
+    }
+
+    public ListNode getFirstTerm() {
+        return FirstTerm;
+    }
+
+    public void setFirstTerm(ListNode FirstTerm) {
+        this.FirstTerm = FirstTerm;
     }
 
 }

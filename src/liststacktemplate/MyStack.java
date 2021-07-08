@@ -20,7 +20,8 @@ public class MyStack<T> {
      * @return return the stack to allow chaining. i.e. stack.push(1).push(2)...
      */
     public MyStack<T> push(T t) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        arr.add(t);
+        return this;
     }
 
     /**
@@ -31,7 +32,21 @@ public class MyStack<T> {
      * @return the top of the stack/removed element
      */
     public T pop() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ListNode camera = arr.getFirstTerm();
+        ListNode prev=null ;
+        while (camera.getPointer() != null) {
+            prev = camera;
+            camera = camera.getPointer();
+        }
+        if(prev==null){
+        arr.setFirstTerm(null);
+        
+        }else{
+        arr.setLastTerm(prev);
+        prev.setPointer(null);
+        }
+        return (T) camera.getValue();
+        
     }
 
     /**
@@ -40,7 +55,7 @@ public class MyStack<T> {
      * @return the top element of the stack
      */
     public T peek() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return arr.get(arr.size());
     }
 
     /**
@@ -49,7 +64,7 @@ public class MyStack<T> {
      * @return true-contains elements; false otherwise.
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return arr.isEmpty();
     }
 
     /**
@@ -58,7 +73,7 @@ public class MyStack<T> {
      * @return
      */
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return arr.size();
     }
 
     /**
@@ -69,6 +84,6 @@ public class MyStack<T> {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return arr.toString();
     }
 }
